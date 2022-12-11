@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <span class="title">
+    <h1>{% block title %} This is the FeDex blueprint {% endblock %}</h1>
+  </span>
+    <div class="content">
+      <h2>Users list</h2>
+      <ul>
+      {% for user in users %}
+        <li>{{ user }}</li>
+      {% endfor %}
+      </ul>
+    </div>
+{% endblock %}

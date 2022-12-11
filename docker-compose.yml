@@ -1,0 +1,45 @@
+  version: "3"
+
+  services:
+    app:
+      container_name: test_flask
+      build:
+        context: ./web
+        dockerfile: Dockerfile
+      environment:
+        FLASK_APP: app
+        FLASK_DEBUG: 1
+      restart: on-failure
+      depends_on:
+        - db
+
+    db:
+      container_name: maria_db
+      image: mariadb:latest
+      environment:
+        MARIADB_DATABASE: flask
+        MARIADB_USER: user
+        MARIADB_PASSWORD: pws
+        MARIADB_ROOT_PASSWORD: root
+      volumes:
+        - "./db/data:/var/lib/mysql"
+#      ports:
+#        - "3306:3306"
+
+    php_admin:
+      container_name: php_admin
+      image: phpmyadmin:latest
+      ports:
+        - "8888:80"
+      links:
+        - db
+
+    nginx:
+      container_name: proxy_web
+      build:
+        context: ./
+        dockerfile: nginx/Dockerfile
+      ports:
+        - "80:80"
+      depends_on:
+        - app
